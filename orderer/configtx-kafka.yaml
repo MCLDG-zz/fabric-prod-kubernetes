@@ -43,7 +43,7 @@ Organizations:
         Name: McdgOrdererOrg
 
         # ID to load the MSP definition as
-        ID: McdgOrgordererMSP
+        ID: McdgOrdererOrgMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: /opt/share/mcdg/orderer/orderer/msp/

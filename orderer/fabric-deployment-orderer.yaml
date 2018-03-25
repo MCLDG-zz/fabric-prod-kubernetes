@@ -28,7 +28,7 @@ spec:
         - name: ORDERER_GENERAL_GENESISFILE
           value: /var/hyperledger/orderer/orderer.genesis.block
         - name: ORDERER_GENERAL_LOCALMSPID
-          value: OrgordererMSP
+          value: McdgOrdererOrgMSP
         - name: ORDERER_GENERAL_LOCALMSPDIR
           value: /var/hyperledger/orderer/msp
         - name: ORDERER_GENERAL_TLS_ENABLED
