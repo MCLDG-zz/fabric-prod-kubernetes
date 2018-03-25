@@ -59,8 +59,7 @@ sudo cp admin/msp/signcerts/cert.pem orderer/msp/admincerts
 ## Generate the genesis block for the orderer
 Back on the EC2 instance, go to /opt/share/mcdg
 curl https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-amd64-1.1.0-rc1/hyperledger-fabric-linux-amd64-1.1.0-rc1.tar.gz | tar xz
-copy the files configtx.yaml, core.yaml and orderer.yaml from this repo (see orderer/config directory) 
-to /opt/share/mcdg/config
+copy the files configtx.yaml, core.yaml and orderer.yaml from this repo (see orderer/config directory) : sudo cp /opt/share/mcdg/config/* /opt/share/mcdg/orderer/orderer/
 copy the file configtx.yaml from this repo (see orderer/config directory) 
 to /opt/share/mcdg
 
@@ -73,8 +72,7 @@ The orderer genesis.block will now be in:
 
 Inspect the contents of the genesis block:
 
-bin/configtxgen -inspectBlock channel-artifacts/genesis.block
-
+configtx
 Now you can deploy the orderer. At this point we have an orderer with an orderer system channel
 Next we need an orderer peer.
 
@@ -98,6 +96,10 @@ sudo mkdir /opt/share/mcdg/orderer/peer0/msp/admincerts
 In directory: /opt/share/mcdg/orderer
 sudo cp admin/msp/signcerts/cert.pem peer0/msp/admincerts
 
+copy the files configtx.yaml, core.yaml and orderer.yaml from this repo (see orderer/config directory) : sudo cp /opt/share/mcdg/config/* /opt/share/mcdg/orderer/peer0/
+
+Start the peer container
+
 ## Register the CLI user
 - for some reason I had to enroll the admin user again... not sure why. This regenerated the keys
 * use 'kubectl exec -it  orderer-ca-86c89f6764-bc8xs -n mcdgorderer bash' to exec into the fabric-ca-server you 
@@ -120,6 +122,8 @@ Exit the CA container
 sudo mkdir /opt/share/mcdg/orderer/cli/msp/admincerts
 In directory: /opt/share/mcdg/orderer
 sudo cp admin/msp/signcerts/cert.pem cli/msp/admincerts
+
+copy the files configtx.yaml, core.yaml and orderer.yaml from this repo (see orderer/config directory) : sudo cp /opt/share/mcdg/config/* /opt/share/mcdg/orderer/cli/
 
 Start the CLI pod
 

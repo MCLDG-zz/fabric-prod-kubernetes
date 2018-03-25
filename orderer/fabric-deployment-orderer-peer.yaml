@@ -57,8 +57,6 @@ spec:
           value: McdgOrdererOrgMSP
         - name: CORE_PEER_CHAINCODELISTENADDRESS
           value: 0.0.0.0:7052
-        - name: FABRIC_CFG_PATH
-          value: /etc/hyperledger/fabric/config
         workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         ports:
          - containerPort: 7051
@@ -67,15 +65,15 @@ spec:
         command: ["peer"]
         args: ["node","start"]
         volumeMounts:
-         - mountPath: /var/hyperledger/orderer/msp
+         - mountPath: /etc/hyperledger/fabric/msp
            name: orderer-ca
            subPath: peer0/msp
-         - mountPath: /var/hyperledger/orderer/tls
+         - mountPath: /etc/hyperledger/fabric/tls
            name: orderer-ca
            subPath: peer0/tls
-         - mountPath: /etc/hyperledger/fabric/config
-           name: orderer-config
-           subPath: config
+         - mountPath: /etc/hyperledger/fabric
+           name: orderer-ca
+           subPath: peer0
          - mountPath: /var/hyperledger/orderer/orderer.genesis.block
            name: orderer-artifacts
            subPath: genesis.block
@@ -85,9 +83,6 @@ spec:
        - name: orderer-ca
          persistentVolumeClaim:
              claimName: mcdgorderer-pvc
-       - name: orderer-config
-         persistentVolumeClaim:
-             claimName: mcdgordererconfig-pvc
        - name: orderer-artifacts
          persistentVolumeClaim:
              claimName: mcdgorderer-artifacts-pvc

@@ -33,8 +33,6 @@ spec:
             value: McdgOrdererOrgMSP
           - name: CORE_PEER_MSPCONFIGPATH
             value: /etc/hyperledger/fabric/msp
-          - name: FABRIC_CFG_PATH
-            value: /etc/hyperledger/fabric/config
           workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
           command: [ "/bin/bash", "-c", "--" ]
           args: [ "while true; do sleep 30; done;" ]
@@ -44,18 +42,15 @@ spec:
            - mountPath: /etc/hyperledger/fabric/msp
              name: orderer-ca
              subPath: cli/msp
-           - mountPath: /etc/hyperledger/fabric/config
-             name: orderer-config
-             subPath: config
+           - mountPath: /etc/hyperledger/fabric
+             name: orderer-ca
+             subPath: cli
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
              name: orderer-artifacts
       volumes:
        - name: orderer-ca
          persistentVolumeClaim:
              claimName: mcdgorderer-pvc
-       - name: orderer-config
-         persistentVolumeClaim:
-             claimName: mcdgordererconfig-pvc
        - name: orderer-artifacts
          persistentVolumeClaim:
              claimName: mcdgorderer-artifacts-pvc
