@@ -39,6 +39,8 @@ spec:
           value: /var/hyperledger/orderer/tls/server.crt
         - name: ORDERER_GENERAL_TLS_ROOTCAS
           value: '[/var/hyperledger/orderer/tls/ca.crt]'
+        - name: FABRIC_CFG_PATH
+          value: /etc/hyperledger/fabric/config
         workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         ports:
          - containerPort: 7050
@@ -46,12 +48,13 @@ spec:
         volumeMounts:
          - mountPath: /var/hyperledger/orderer/msp
            name: orderer-ca
-           #subPath: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp
            subPath: orderer/msp
          - mountPath: /var/hyperledger/orderer/tls
            name: orderer-ca
-           #subPath: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/
            subPath: orderer/tls
+         - mountPath: /etc/hyperledger/fabric/config
+           name: orderer-config
+           subPath: config
          - mountPath: /var/hyperledger/orderer/orderer.genesis.block
            name: orderer-artifacts
            subPath: genesis.block
@@ -59,6 +62,9 @@ spec:
        - name: orderer-ca
          persistentVolumeClaim:
              claimName: mcdgorderer-pvc
+       - name: orderer-config
+         persistentVolumeClaim:
+             claimName: mcdgordererconfig-pvc
        - name: orderer-artifacts
          persistentVolumeClaim:
              claimName: mcdgorderer-artifacts-pvc

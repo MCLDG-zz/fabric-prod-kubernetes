@@ -45,7 +45,7 @@ spec:
              name: orderer-ca
              subPath: cli/msp
            - mountPath: /etc/hyperledger/fabric/config
-             name: orderer-cli
+             name: orderer-config
              subPath: config
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
              name: orderer-artifacts
@@ -53,9 +53,9 @@ spec:
        - name: orderer-ca
          persistentVolumeClaim:
              claimName: mcdgorderer-pvc
-       - name: orderer-cli
+       - name: orderer-config
          persistentVolumeClaim:
-             claimName: mcdgorderercli-pvc
+             claimName: mcdgordererconfig-pvc
        - name: orderer-artifacts
          persistentVolumeClaim:
              claimName: mcdgorderer-artifacts-pvc

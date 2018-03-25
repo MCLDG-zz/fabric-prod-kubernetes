@@ -121,6 +121,8 @@ sudo mkdir /opt/share/mcdg/orderer/cli/msp/admincerts
 In directory: /opt/share/mcdg/orderer
 sudo cp admin/msp/signcerts/cert.pem cli/msp/admincerts
 
+Start the CLI pod
+
 ## Create a channel
 peer channel create -c channel1 -o orderer:7050
 
