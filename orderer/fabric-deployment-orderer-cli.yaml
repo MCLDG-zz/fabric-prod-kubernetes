@@ -30,7 +30,7 @@ spec:
           - name: CORE_PEER_ADDRESS
             value: peer0.mcdgorderer:7051
           - name: CORE_PEER_LOCALMSPID
-            value: McdgOrdererOrgMSP
+            value: McdgClientOrgMSP
           - name: CORE_PEER_MSPCONFIGPATH
             value: /etc/hyperledger/fabric/msp
           workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer

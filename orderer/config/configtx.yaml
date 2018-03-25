@@ -20,10 +20,17 @@ Profiles:
                 - *McdgOrdererOrg
             Capabilities:
                 <<: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - <<: *McdgClientOrg
+            Capabilities:
+                <<: *ApplicationCapabilities
         Consortiums:
             McdgConsortium:
                 Organizations:
                     - *McdgOrdererOrg
+                    - *McdgClientOrg
 
 ################################################################################
 #
@@ -48,6 +55,17 @@ Organizations:
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: /opt/share/mcdg/orderer/orderer/msp/
 
+    - &McdgClientOrg
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: McdgClientOrg
+
+        # ID to load the MSP definition as
+        ID: McdgClientOrgMSP
+
+        # MSPDir is the filesystem path which contains the MSP configuration
+        MSPDir: /opt/share/mcdg/orderer/cli/msp/
+
 ################################################################################
 #
 #   SECTION: Orderer
@@ -63,7 +81,7 @@ Orderer: &OrdererDefaults
     OrdererType: kafka
 
     Addresses:
-        - orderer.mcdgorderer:7050
+      - orderer.mcdgorderer:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
@@ -93,6 +111,7 @@ Orderer: &OrdererDefaults
     # Organizations is the list of orgs which are defined as participants on
     # the orderer side of the network
     Organizations:
+      - *McdgOrdererOrg
 
 ################################################################################
 #
@@ -107,6 +126,7 @@ Application: &ApplicationDefaults
     # Organizations is the list of orgs which are defined as participants on
     # the application side of the network
     Organizations:
+      - *McdgClientOrg
 
 ################################################################################
 #

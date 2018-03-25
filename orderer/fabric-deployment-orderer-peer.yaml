@@ -54,7 +54,7 @@ spec:
         - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
           value: peer0.mcdgorderer:7051
         - name: CORE_PEER_LOCALMSPID
-          value: McdgOrdererOrgMSP
+          value: McdgClientOrgMSP
         - name: CORE_PEER_CHAINCODELISTENADDRESS
           value: 0.0.0.0:7052
         workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
