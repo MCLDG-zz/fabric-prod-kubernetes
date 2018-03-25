@@ -1,0 +1,56 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+   namespace: org1
+   name: cli
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: cli
+    spec:
+      containers:
+        - name: cli
+          image:  hyperledger/fabric-tools:x86_64-1.1.0-rc1
+          env:
+
+          - name: CORE_PEER_TLS_ENABLED
+            value: "false"
+          - name: CORE_VM_ENDPOINT
+            value: unix:///host/var/run/docker.sock
+          - name: GOPATH
+            value: /opt/gopath
+          - name: CORE_LOGGING_LEVEL
+            value: DEBUG
+          - name: CORE_PEER_ID
+            value: cli
+          - name: CORE_PEER_ADDRESS
+            value: peer0.mcdgorderer:7051
+          - name: CORE_PEER_LOCALMSPID
+            value: McdgOrdererOrgMSP
+          - name: CORE_PEER_MSPCONFIGPATH
+            value: /etc/hyperledger/fabric/msp
+          workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          volumeMounts:
+           - mountPath: /host/var/run/
+             name: run
+           - mountPath: /etc/hyperledger/fabric/msp
+             name: orderer-ca
+             subPath: admin/msp
+           - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+             name: orderer-artifacts
+      volumes:
+       - name: orderer-ca
+         persistentVolumeClaim:
+             claimName: mcdgorderer-pvc
+       - name: orderer-artifacts
+         persistentVolumeClaim:
+             claimName: mcdgorderer-artifacts-pvc
+       - name: run
+         hostPath:
+           path: /run
