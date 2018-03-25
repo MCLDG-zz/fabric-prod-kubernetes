@@ -44,6 +44,7 @@ Now, enroll the orderer user
 
 * export FABRIC_CA_CLIENT_HOME=$FABRIC_CA_HOME/orderer
 * fabric-ca-client enroll -u http://mcdgorderer:<replace pwd>@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp
+- wonder if mcdgorderer above should be just orderer
 
 Exit the fabric-ca container
 
@@ -52,7 +53,7 @@ Exit the fabric-ca container
 
 * copy the admin cert to the admincerts folder of the orderer:
 sudo mkdir /opt/share/mcdg/orderer/orderer/msp/admincerts
-In directory: /opt/share/mcdg   
+In directory: /opt/share/mcdg/orderer  
 sudo cp admin/msp/signcerts/cert.pem orderer/msp/admincerts
 
 ## Generate the genesis block for the orderer
@@ -69,7 +70,26 @@ Inspect the contents of the genesis block:
 
 bin/configtxgen -inspectBlock channel-artifacts/genesis.block
 
-Now you can deploy the orderer
+Now you can deploy the orderer. At this point we have an orderer with an orderer system channel
+Next we need an orderer peer.
+
+## Register an orderer peer
+- for some reason I had to enroll the admin user again... not sure why. This regenerated the keys
+fabric-ca-client register --id.name peer0 --id.type peer --id.affiliation orderer.mcdgorderer --id.attrs 'hf.Revoker=true,admin=true:ecert'
+2018/03/25 04:10:27 [INFO] Configuration file location: /etc/hyperledger/fabric-ca-server/fabric-ca-client-config.yaml
+Password: VawcmZhcegHa
+
+Now, enroll the peer0 user
+
+* export FABRIC_CA_CLIENT_HOME=$FABRIC_CA_HOME/peer0
+* fabric-ca-client enroll -u http://peer0:<replace pwd>@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp
+
+* Peer certs will be in the EFS drive at: /opt/share/mcdg/orderer/peer0/msp
+
+* copy the admin cert to the admincerts folder of the orderer:
+sudo mkdir /opt/share/mcdg/orderer/peer0/msp/admincerts
+In directory: /opt/share/mcdg/orderer
+sudo cp admin/msp/signcerts/cert.pem peer0/msp/admincerts
 
 ## Ports
 Orderer CA - container port: 7054, NodePort: 30300
