@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mcdgorderer-pv
+  labels:
+    pv-name: mcdgorderer-pv
+spec:
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
+    - rsize=1048576
+    - wsize=1048576
+    - hard
+    - timeo=600
+    - retrans=2
+  nfs:
+    server: fs-e0c93099.efs.us-east-2.amazonaws.com
+    path: /mcdg/orderer
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: mcdgorderer
+  name: mcdgorderer-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  selector:
+    matchLabels:
+      pv-name: mcdgorderer-pv
+  resources:
+    requests:
+      storage: 10Mi
+

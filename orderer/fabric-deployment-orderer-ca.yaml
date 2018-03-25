@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: mcdgorderer
+  name: orderer-ca
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: ca
+       org: mcdgorderer
+       name: orderer-ca
+    spec:
+     containers:
+       - name: orderer-ca
+         image: hyperledger/fabric-ca:x86_64-1.1.0-rc1
+         env:
+         - name:  FABRIC_CA_HOME
+           value: /etc/hyperledger/fabric-ca-server
+         ports:
+          - containerPort: 7054
+         command: ["sh"]
+         args:  ["-c", "fabric-ca-server start -b admin:adminpw"]
+         volumeMounts:
+          - mountPath: /etc/hyperledger/fabric-ca-server
+            name: orderer-ca
+     volumes:
+       - name: orderer-ca
+         persistentVolumeClaim:
+             claimName: mcdgorderer-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: mcdgorderer
+  name: orderer-ca
+spec:
+ selector:
+   app: hyperledger
+   role: ca
+   org: mcdgorderer
+   name: orderer-ca
+ type: NodePort
+ ports:
+   - name: endpoint
+     protocol: TCP
+     port: 7054
+     targetPort: 7054
+     nodePort: 30300

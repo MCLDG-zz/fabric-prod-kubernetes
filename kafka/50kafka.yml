@@ -1,0 +1,100 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: kafka
+  namespace: kafka
+spec:
+  selector:
+    matchLabels:
+      app: kafka
+  serviceName: "broker"
+  replicas: 3
+  updateStrategy:
+    type: OnDelete
+  template:
+    metadata:
+      labels:
+        app: kafka
+      annotations:
+    spec:
+      terminationGracePeriodSeconds: 30
+      initContainers:
+      - name: init-config
+        image: solsson/kafka-initutils@sha256:c98d7fb5e9365eab391a5dcd4230fc6e72caf929c60f29ff091e3b0215124713
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        command: ['/bin/bash', '/etc/kafka/init.sh']
+        volumeMounts:
+        - name: config
+          mountPath: /etc/kafka
+      containers:
+      - name: broker
+        image: solsson/kafka:1.0.1@sha256:1a4689d49d6274ac59b9b740f51b0408e1c90a9b66d16ad114ee9f7193bab111
+        env:
+        - name: KAFKA_LOG4J_OPTS
+          value: -Dlog4j.configuration=file:/etc/kafka/log4j.properties
+        - name: JMX_PORT
+          value: "5555"
+        - name: KAFKA_LOG_RETENTION_MS
+          value: "-1"
+        - name: KAFKA_MESSAGE_MAX_BYTES
+          value: "103809024"
+        - name: KAFKA_REPLICA_FETCH_MAX_BYTES
+          value: "103809024"
+        - name: KAFKA_BROKER_ID
+          value: "0"
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: kafka.zookeeper:2181
+        - name: KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE
+          value: "false"
+        - name: KAFKA_DEFAULT_REPLICATION_FACTOR
+          value: "3"
+        - name: KAFKA_MIN_INSYNC_REPLICAS
+          value: "2"
+        ports:
+        - name: inside
+          containerPort: 9092
+        - name: outside
+          containerPort: 9094
+        - name: jmx
+          containerPort: 5555
+        command:
+        - ./bin/kafka-server-start.sh
+        - /etc/kafka/server.properties
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        readinessProbe:
+          tcpSocket:
+            port: 9092
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: config
+          mountPath: /etc/kafka
+        - name: data
+          mountPath: /var/lib/kafka/data
+      volumes:
+      - name: config
+        configMap:
+          name: broker-config
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: kafka-broker
+      resources:
+        requests:
+          storage: 200Gi
