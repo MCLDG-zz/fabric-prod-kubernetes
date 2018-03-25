@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-   namespace: org1
+   namespace: mcdgorderer
    name: cli
 spec:
   replicas: 1
@@ -41,7 +41,7 @@ spec:
              name: run
            - mountPath: /etc/hyperledger/fabric/msp
              name: orderer-ca
-             subPath: admin/msp
+             subPath: cli/msp
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
              name: orderer-artifacts
       volumes:
