@@ -61,19 +61,19 @@ General:
     #  - provisional: Utilizes a genesis profile, specified by GenesisProfile,
     #                 to dynamically generate a new genesis block.
     #  - file: Uses the file provided by GenesisFile as the genesis block.
-    GenesisMethod: provisional
+    GenesisMethod: file
 
     # Genesis profile: The profile to use to dynamically generate the genesis
     # block to use when initializing the orderer system channel and
     # GenesisMethod is set to "provisional". See the configtx.yaml file for the
     # descriptions of the available profiles. Ignored if GenesisMethod is set to
     # "file".
-    GenesisProfile: SampleInsecureSolo
+    GenesisProfile: OrdererGenesis
 
     # Genesis file: The file containing the genesis block to use when
     # initializing the orderer system channel and GenesisMethod is set to
     # "file". Ignored if GenesisMethod is set to "provisional".
-    GenesisFile: genesisblock
+    GenesisFile: /var/hyperledger/orderer/orderer.genesis.block
 
     # LocalMSPDir is where to find the private crypto material needed by the
     # orderer. It is set relative here as a default for dev environments but
@@ -85,7 +85,7 @@ General:
     # ID of one of the organizations defined in the orderer system channel's
     # /Channel/Orderer configuration. The sample organization defined in the
     # sample configuration provided has an MSP ID of "DEFAULT".
-    LocalMSPID: DEFAULT
+    LocalMSPID: McdgOrdererOrgMSP
 
     # Enable an HTTP service for Go "pprof" profiling as documented at:
     # https://golang.org/pkg/net/http/pprof
