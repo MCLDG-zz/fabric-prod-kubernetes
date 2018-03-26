@@ -41,10 +41,10 @@ spec:
              name: run
            - mountPath: /etc/hyperledger/fabric/msp
              name: orderer-ca
-             subPath: cli/msp
+             subPath: peer0/msp
            - mountPath: /etc/hyperledger/fabric
              name: orderer-ca
-             subPath: cli
+             subPath: peer0
            - mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
              name: orderer-artifacts
       volumes:

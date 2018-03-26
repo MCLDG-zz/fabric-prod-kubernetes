@@ -20,17 +20,20 @@ Profiles:
                 - *McdgOrdererOrg
             Capabilities:
                 <<: *OrdererCapabilities
-        Application:
-            <<: *ApplicationDefaults
-            Organizations:
-                - <<: *McdgClientOrg
-            Capabilities:
-                <<: *ApplicationCapabilities
         Consortiums:
             McdgConsortium:
                 Organizations:
                     - *McdgOrdererOrg
                     - *McdgClientOrg
+
+    OrdererChannel:
+        Consortium: McdgConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *McdgClientOrg
+            Capabilities:
+                <<: *ApplicationCapabilities
 
 ################################################################################
 #
@@ -64,7 +67,16 @@ Organizations:
         ID: McdgClientOrgMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: /opt/share/mcdg/orderer/cli/msp/
+        MSPDir: /opt/share/mcdg/orderer/peer0/msp/
+
+        AdminPrincipal: Role.ADMIN
+
+        AnchorPeers:
+            # AnchorPeers defines the location of peers which can be used
+            # for cross org gossip communication.  Note, this value is only
+            # encoded in the genesis block in the Application section context
+            - Host: peer0.mcdgorderer
+              Port: 7051
 
 ################################################################################
 #

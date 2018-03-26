@@ -126,7 +126,7 @@ registry:
      - name: admin
        pass: adminpw
        type: client
-       affiliation: ""
+       affiliation: "orderer"
        attrs:
           hf.Registrar.Roles: "peer,orderer,client,user"
           hf.Registrar.DelegateRoles: "peer,orderer,client,user"
