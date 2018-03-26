@@ -55,6 +55,8 @@ Organizations:
         # ID to load the MSP definition as
         ID: McdgOrdererOrgMSP
 
+        AdminPrincipal: Role.ADMIN
+
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: /opt/share/mcdg/orderer/orderer/msp/
 
@@ -69,7 +71,7 @@ Organizations:
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: /opt/share/mcdg/orderer/peer0/msp/
 
-        AdminPrincipal: Role.ADMIN
+        AdminPrincipal: Role.PEER
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used

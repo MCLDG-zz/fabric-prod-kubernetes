@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: orderer-mcdgorderer
-        image: hyperledger/fabric-orderer:x86_64-1.1.0-rc1
+        image: hyperledger/fabric-orderer:x86_64-1.1.0
         env:
         - name: ORDERER_GENERAL_LOGLEVEL
           value: debug

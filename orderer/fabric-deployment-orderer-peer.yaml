@@ -23,7 +23,7 @@ spec:
 
 
       - name: peer0-orderer
-        image: hyperledger/fabric-peer:x86_64-1.1.0-rc1
+        image: hyperledger/fabric-peer:x86_64-1.1.0
         env:
         - name: CORE_LEDGER_STATE_STATEDATABASE
           value: "CouchDB"
